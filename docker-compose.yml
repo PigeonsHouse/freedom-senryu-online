@@ -1,0 +1,24 @@
+version: '2'
+services:
+  db:
+    image: postgres:13.4
+    ports:
+      - 15432:5432
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    env_file:
+      - .env
+  # api:
+  #   build: .
+  #   command: go run main.go
+  #   volumes: 
+  #     - .:/opt/freedom-senryu-online
+  #   ports:
+  #     - 8080:8080
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     - db
+
+volumes:
+  dbdata: null

@@ -1,0 +1,56 @@
+@startuml er
+title freedom_senryu_online
+
+entity Room {
+    * id : string <<generated>>
+    ---
+    * is_playing : boolean
+    ** * host_user_id : string <<FK>>**
+    * created_at : timestamp <<generated>>
+    * updated_at : timestamp <<generated>>
+}
+
+entity User {
+    * id : string <<generated>>
+    ---
+    * email : string
+    * name : string
+    **room_id : string <<FK>>**
+    * created_at : timestamp <<generated>>
+    * updated_at : timestamp <<generated>>
+}
+
+entity Senryu {
+    * id : string <<generated>>
+    ---
+    theme : string
+    first_length : integer
+    first_content : string
+    **first_author_id : string <<FK>>**
+    second_length : integer
+    second_content : string
+    **second_author_id : string <<FK>>**
+    third_length : integer
+    third_content : string
+    **third_author_id : string <<FK>>**
+    **room_id : string <<FK>>**
+    * is_finished : boolean
+    * is_public : boolean
+    * created_at : timestamp <<generated>>
+    * updated_at : timestamp <<generated>>
+}
+
+entity Favorite {
+    * id : string <<generated>>
+    ---
+    * **user_id : string <<FK>>**
+    * **senryu_id : string <<FK>>**
+    * created_at : timestamp <<generated>>
+}
+
+Room   ||-r-|{ User
+Room   |o-r-o{ Senryu
+User   |o-u-o{ Senryu
+User   ||-r-o{ Favorite
+Senryu ||-r-o{ Favorite
+@enduml

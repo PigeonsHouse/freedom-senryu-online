@@ -1,0 +1,589 @@
+openapi: 3.0.0
+info:
+  title: FreedomSenryuOnline
+  description: 自由に！オンラインで！川柳作ろうぜってゲームのAPI鯖です。
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api/v1
+tags:
+  - name: users
+    description: user table
+  - name: rooms
+    description: room table
+  - name: senryus
+    description: senryu table
+  - name: favorites
+    description: favorite table
+paths:
+  /users:
+    post:
+      tags:
+        - users
+      summary: Create user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatingUser"
+        required: false
+      responses:
+        200:
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+      security:
+        - Bearer: []
+      x-codegen-request-body-name: Request body
+    delete:
+      tags:
+        - users
+      summary: Delete user name
+      responses:
+        200:
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    default: OK
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+      security:
+        - Bearer: []
+    put:
+      tags:
+        - users
+      summary: Change user name
+      parameters:
+        - name: name
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+      security:
+        - Bearer: []
+  /users/{user_id}:
+    get:
+      tags:
+        - users
+      summary: Get user info by user_id
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+      security:
+        - Bearer: []
+  /users/me:
+    get:
+      tags:
+        - users
+      summary: Get my user info
+      responses:
+        200:
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+      security:
+        - Bearer: []
+  /rooms:
+    post:
+      tags:
+        - rooms
+      summary: Open room
+      responses:
+        200:
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Room"
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+      security:
+        - Bearer: []
+  /rooms/{room_id}:
+    get:
+      tags:
+        - rooms
+      summary: Get room
+      parameters:
+        - name: room_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Room"
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+      security:
+        - Bearer: []
+    delete:
+      tags:
+        - rooms
+      summary: Close room
+      parameters:
+        - name: room_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    default: OK
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+      security:
+        - Bearer: []
+  /senryus:
+    get:
+      tags:
+        - senryus
+      summary: Get senryus
+      parameters:
+        - name: length
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: offset_id
+          in: query
+          schema:
+            type: string
+        - name: sort
+          in: query
+          schema:
+            type: string
+        - name: filter
+          in: query
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Senryu"
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+      security:
+        - Bearer: []
+    post:
+      tags:
+        - senryus
+      summary: Start senryu
+      responses:
+        200:
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Senryu"
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+      security:
+        - Bearer: []
+  /senryus/{senryu_id}:
+    get:
+      tags:
+        - senryus
+      summary: Get senryu by senryu_id
+      parameters:
+        - name: senryu_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Senryu"
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+      security:
+        - Bearer: []
+    put:
+      tags:
+        - senryus
+      summary: Put finished Senryu
+      parameters:
+        - name: senryu_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Senryu"
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+      security:
+        - Bearer: []
+    delete:
+      tags:
+        - senryus
+      summary: Get senryu by senryu_id
+      parameters:
+        - name: senryu_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    default: OK
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+      security:
+        - Bearer: []
+  /users/{user_id}/senryu:
+    get:
+      tags:
+        - senryus
+      summary: Get other user's senryus
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Senryu"
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+      security:
+        - Bearer: []
+  /users/me/senryu:
+    get:
+      tags:
+        - senryus
+      summary: Get my senryus
+      responses:
+        200:
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Senryu"
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+      security:
+        - Bearer: []
+  /favorites/{senryu_id}:
+    post:
+      tags:
+        - favorites
+      summary: favorite senryu
+      parameters:
+        - name: senryu_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Senryu"
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+      security:
+        - Bearer: []
+    delete:
+      tags:
+        - favorites
+      summary: unfavorite senryu
+      parameters:
+        - name: senryu_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    default: OK
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+      security:
+        - Bearer: []
+components:
+  schemas:
+    HTTPValidationError:
+      type: object
+      properties:
+        detail:
+          title: Detail
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationError"
+    CreatingUser:
+      type: object
+      properties:
+        email:
+          title: Email
+          type: string
+          format: email
+        name:
+          title: Name
+          type: string
+    User:
+      type: object
+      properties:
+        id:
+          title: Id
+          type: string
+          format: uuid
+        email:
+          title: Email
+          type: string
+          format: email
+        name:
+          title: Name
+          type: string
+        living_room_id:
+          title: LivingRoomId
+          type: string
+        created_at:
+          title: CreatedAt
+          type: string
+          format: date-time
+        updated_at:
+          title: UpdatedAt
+          type: string
+          format: date-time
+    Room:
+      type: object
+      properties:
+        id:
+          title: Id
+          type: string
+          format: uuid
+        owner_user:
+          $ref: "#/components/schemas/User"
+        is_playing:
+          title: IsPlaying
+          type: boolean
+        created_at:
+          title: CreatedAt
+          type: string
+          format: date-time
+        updated_at:
+          title: UpdatedAt
+          type: string
+          format: date-time
+    Senryu:
+      type: object
+      properties:
+        id:
+          title: Id
+          type: string
+          format: uuid
+        first_length:
+          title: FirstLength
+          type: integer
+        first_content:
+          title: FirstContent
+          type: string
+        first_author:
+          $ref: "#/components/schemas/User"
+        second_length:
+          title: SecondLength
+          type: integer
+        second_content:
+          title: SecondContent
+          type: string
+        second_author:
+          $ref: "#/components/schemas/User"
+        third_length:
+          title: ThirdLength
+          type: integer
+        third_content:
+          title: ThirdContent
+          type: string
+        third_author:
+          $ref: "#/components/schemas/User"
+        room:
+          $ref: "#/components/schemas/Room"
+        is_finished:
+          title: IsFinished
+          type: boolean
+        is_public:
+          title: IsPublic
+          type: boolean
+        favoriting_users:
+          title: FavoritingUsers
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+        created_at:
+          title: CreatedAt
+          type: string
+          format: date-time
+    ValidationError:
+      type: object
+      properties:
+        loc:
+          title: Location
+          type: array
+          items:
+            type: string
+        msg:
+          title: Message
+          type: string
+        type:
+          title: Error Type
+          type: string
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      description: "token"
