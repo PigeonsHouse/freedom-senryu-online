@@ -48,7 +48,7 @@ func (hu User) UpdateUserName(uid string, name string) (models.User, error) {
 
 func (hu User) DeleteByID(uid string) error {
 	db := db.GetDB()
-	if err := db.Delete(&models.User{}, uid).Error; err != nil {
+	if err := db.Where("id = ?", uid).Delete(&models.User{}).Error; err != nil {
 		return err
 	}
 	return nil

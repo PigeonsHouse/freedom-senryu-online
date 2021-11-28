@@ -62,7 +62,7 @@ func RoomRoutes(g *gin.RouterGroup) {
 	r := g.Group("/rooms")
 	r.POST("", ctrl_room.CreateRoom)
 	r.GET("/:room_id", ctrl_room.GetRoomByID)
-	r.DELETE("/:room_id", func(c *gin.Context) {})
+	r.DELETE("/:room_id", ctrl_room.DeleteRoomByID)
 }
 
 func SenryuRoutes(g *gin.RouterGroup) {

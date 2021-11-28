@@ -5,7 +5,6 @@ entity Room {
     * id : string <<generated>>
     ---
     * is_playing : boolean
-    ** * host_user_id : string <<FK>>**
     * created_at : timestamp <<generated>>
     * updated_at : timestamp <<generated>>
 }
@@ -16,6 +15,7 @@ entity User {
     * email : string
     * name : string
     **room_id : string <<FK>>**
+    * is_owner : boolean
     * created_at : timestamp <<generated>>
     * updated_at : timestamp <<generated>>
 }

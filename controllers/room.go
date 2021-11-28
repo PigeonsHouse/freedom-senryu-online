@@ -28,7 +28,9 @@ func (cr Room) CreateRoom(c *gin.Context) {
 }
 
 func (cr Room) GetRoomByID(c *gin.Context) {
-	var r models.Room
+	var (
+		r models.Room
+	)
 
 	uid := middlewares.GetCurrentUserInfo()
 
@@ -38,5 +40,20 @@ func (cr Room) GetRoomByID(c *gin.Context) {
 		c.AbortWithStatusJSON(400, gin.H{"detail": err.Error()})
 		return
 	}
+
 	c.JSON(200, r)
+}
+
+func (cr Room) DeleteRoomByID(c *gin.Context) {
+	uid := middlewares.GetCurrentUserInfo()
+
+	rid := c.Params.ByName("room_id")
+	err := hr.DeleteRoom(uid.UID, rid)
+	if err != nil {
+		c.AbortWithStatusJSON(404, gin.H{"detail": err.Error()})
+		return
+	}
+	c.JSON(200, gin.H{
+		"detail": "OK",
+	})
 }

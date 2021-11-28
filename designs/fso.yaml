@@ -507,11 +507,15 @@ components:
           title: Id
           type: string
           format: uuid
-        owner_user:
-          $ref: "#/components/schemas/User"
         is_playing:
           title: IsPlaying
           type: boolean
+        owner_user:
+          $ref: "#/components/schemas/User"
+        users:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
         created_at:
           title: CreatedAt
           type: string
