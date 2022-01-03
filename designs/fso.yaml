@@ -4,7 +4,7 @@ info:
   description: 自由に！オンラインで！川柳作ろうぜってゲームのAPI鯖です。
   version: 1.0.0
 servers:
-  - url: http://localhost:8080/api/v1
+  - url: http://localhost:18080/api/v1
 tags:
   - name: users
     description: user table

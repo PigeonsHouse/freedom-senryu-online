@@ -1,24 +1,42 @@
-version: '2'
+version: '3.9'
 services:
   db:
     image: postgres:13.4
-    ports:
-      - 15432:5432
+    container_name: "fso-db"
     volumes:
       - dbdata:/var/lib/postgresql/data
     env_file:
       - .env
-  # api:
-  #   build: .
-  #   command: go run main.go
-  #   volumes: 
-  #     - .:/opt/freedom-senryu-online
-  #   ports:
-  #     - 8080:8080
-  #   env_file:
-  #     - .env
-  #   depends_on:
-  #     - db
+
+  api:
+    build: .
+    container_name: "fso-api"
+    volumes:
+      - .:/go/src/fso
+    ports:
+      - 18080:8080
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    container_name: "fso-swagger"
+    ports:
+      - "18081:8080"
+    volumes:
+      - "./designs/fso.yaml:/opt/openapi.yaml"
+    environment:
+      SWAGGER_JSON: /opt/openapi.yaml
+
+  adminer:
+    image: adminer:4.7.5
+    container_name: fso-adminer
+    ports:
+      - 18082:8080
+    depends_on:
+      - db
 
 volumes:
   dbdata: null
