@@ -7,12 +7,19 @@ import (
 	"github.com/gin-contrib/cors"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gorilla/websocket"
 )
 
 var (
 	ctrl_user controllers.User
 	ctrl_room controllers.Room
+	ctrl_ws   controllers.WebSocket
 )
+
+var wsupgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+}
 
 func Init() {
 	r := gin.Default()
@@ -43,6 +50,7 @@ func Init() {
 	RoomRoutes(g)
 	SenryuRoutes(g)
 	FavoriteRoutes(g)
+	WebSocketRoutes(g)
 
 	r.Run(":8080")
 }
@@ -78,4 +86,9 @@ func FavoriteRoutes(g *gin.RouterGroup) {
 	f := g.Group("/favorites")
 	f.POST("/:senryu_id", func(c *gin.Context) {})
 	f.DELETE("/:senryu_id", func(c *gin.Context) {})
+}
+
+func WebSocketRoutes(g *gin.RouterGroup) {
+	f := g.Group("/ws")
+	f.GET("/:room_id", ctrl_ws.ControllWebSocket)
 }

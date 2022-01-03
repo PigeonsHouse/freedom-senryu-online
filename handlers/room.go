@@ -44,7 +44,7 @@ func (hr Room) PostRoom(uid string) (models.Room, error) {
 	return room, nil
 }
 
-func (hr Room) GetRoom(uid string, rid string) (models.Room, error) {
+func (hr Room) GetRoom(rid string) (models.Room, error) {
 	db := db.GetDB()
 
 	var (

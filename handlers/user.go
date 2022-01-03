@@ -53,3 +53,27 @@ func (hu User) DeleteByID(uid string) error {
 	}
 	return nil
 }
+
+func (hu User) JoinRoom(uid string, rid string) (models.User, error) {
+	var (
+		u   models.User
+		err error
+	)
+	db := db.GetDB()
+	if err = db.Model(&u).Where("id = ?", uid).Update("room_id", rid).Error; err != nil {
+		return u, err
+	}
+	if u, err = hu.GetByID(uid); err != nil {
+		return u, nil
+	}
+	return u, nil
+}
+
+func (hu User) ExitRoom(uid string) error {
+	db := db.GetDB()
+	var u models.User
+	if err := db.Model(&u).Where("id = ?", uid).Update("room_id", nil).Error; err != nil {
+		return err
+	}
+	return nil
+}

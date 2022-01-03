@@ -32,10 +32,8 @@ func (cr Room) GetRoomByID(c *gin.Context) {
 		r models.Room
 	)
 
-	uid := middlewares.GetCurrentUserInfo()
-
 	rid := c.Params.ByName("room_id")
-	r, err := hr.GetRoom(uid.UID, rid)
+	r, err := hr.GetRoom(rid)
 	if err != nil {
 		c.AbortWithStatusJSON(400, gin.H{"detail": err.Error()})
 		return
